@@ -3,7 +3,9 @@ pipeline{
 	
 	stages{ 
 		stage('gitcheckout'){
-			git branch: 'main', url:'https://github.com/PavanThumati/spring-application.git'
+			steps{
+				git branch: 'main', url:'https://github.com/PavanThumati/spring-application.git'
+			}
 		}
 
 
