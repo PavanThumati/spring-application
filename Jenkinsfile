@@ -1,7 +1,9 @@
 @Library('my-jenkins-shared-library') _
 pipeline{
 	agent any
-	
+	tools {
+        jdk 'JDK11'  // Use the name you configured
+    }
 	stages{ 
 		stage('gitcheckout'){
 			steps{
