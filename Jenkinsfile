@@ -4,8 +4,13 @@ pipeline{
 	tools {
         jdk 'JDK11'  // Use the name you configured
     }
+	parameters{
+
+        choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/Destroy')
+    }
 	stages{ 
 		stage('gitcheckout'){
+			when { expression {  params.action == 'create' } }
 			steps{
 				gitCheckOut(
 					branch:'main', 
@@ -15,6 +20,7 @@ pipeline{
 		}
 
 		stage('Unit Test maven'){
+			when { expression {  params.action == 'create' } }
             steps{
                script{
                    mvnTest()
@@ -23,6 +29,7 @@ pipeline{
         }
 
 		stage('Integration Test maven'){
+			when { expression {  params.action == 'create' } }
             steps{
                script{
                    mvnIntegrationTest()
