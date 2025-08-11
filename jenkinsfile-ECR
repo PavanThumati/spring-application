@@ -75,7 +75,7 @@ pipeline{
             steps{
                script{
                    
-                   dockerBuild("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
+                   dockerBuildECR("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
                }
             }
         }
@@ -84,7 +84,7 @@ pipeline{
             steps{
                script{
                    
-                   dockerImageScan("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
+                   dockerImageScanECR("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
                }
             }
         }
@@ -93,7 +93,7 @@ pipeline{
             steps{
                script{
                    
-                   dockerImagePush("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
+                   dockerImagePushECR("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
                }
             }
         }   
@@ -102,7 +102,7 @@ pipeline{
             steps{
                script{
                    
-                   dockerImageCleanup("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
+                   dockerImageCleanupECR("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
                }
             }
         } 
