@@ -98,7 +98,9 @@ pipeline{
          when { expression {  params.action == 'create' } }
             steps{
                script{
-                   
+                   aws configure set aws_access_key_id "$ACCESS_KEY"
+                	aws configure set aws_secret_access_key "$SECRET_KEY"
+                	aws configure set region "${params.Region}"
                    dockerImagePushECR("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
                }
             }
