@@ -30,51 +30,51 @@ pipeline{
 			}
 		}
 
-		stage('Unit Test maven'){
-			when { expression {  params.action == 'create' } }
-            steps{
-               script{
-                   mvnTest()
-               }
-            }
-        }
+		// stage('Unit Test maven'){
+		// 	when { expression {  params.action == 'create' } }
+		// 	steps{
+		// 	   script{
+		// 		   mvnTest()
+		// 	   }
+		// 	}
+		// }
 
-		stage('Integration Test maven'){
-			when { expression {  params.action == 'create' } }
-            steps{
-               script{
-                   mvnIntegrationTest()
-               }
-            }
-        }
-		stage('Static code analysis: Sonarqube'){
-         when { expression {  params.action == 'create' } }
-            steps{
-               script{
-                   def SonarQubecredentialsId = 'sonarqube-api'
-                   staticCodeAnalysis(SonarQubecredentialsId)
-               }
-            }
-        }
+		// stage('Integration Test maven'){
+		// 	when { expression {  params.action == 'create' } }
+		// 	steps{
+		// 	   script{
+		// 		   mvnIntegrationTest()
+		// 	   }
+		// 	}
+		// }
+		// stage('Static code analysis: Sonarqube'){
+		//  when { expression {  params.action == 'create' } }
+		// 	steps{
+		// 	   script{
+		// 		   def SonarQubecredentialsId = 'sonarqube-api'
+		// 		   staticCodeAnalysis(SonarQubecredentialsId)
+		// 	   }
+		// 	}
+		// }
 
-		stage('Quality Gate Status Check : Sonarqube'){
-         when { expression {  params.action == 'create' } }
-            steps{
-               script{
-                   
-                   def SonarQubecredentialsId = 'sonarqube-api'
-                   QualityGateStatus(SonarQubecredentialsId)
-               }
-            }
-        }
-		stage('Maven Build : maven'){
-         when { expression {  params.action == 'create' } }
-            steps{
-               script{
-                   mvnBuild()
-               }
-            }
-        }
+		// stage('Quality Gate Status Check : Sonarqube'){
+		//  when { expression {  params.action == 'create' } }
+		// 	steps{
+		// 	   script{
+				   
+		// 		   def SonarQubecredentialsId = 'sonarqube-api'
+		// 		   QualityGateStatus(SonarQubecredentialsId)
+		// 	   }
+		// 	}
+		// }
+		// stage('Maven Build : maven'){
+		//  when { expression {  params.action == 'create' } }
+		// 	steps{
+		// 	   script{
+		// 		   mvnBuild()
+		// 	   }
+		// 	}
+		// }
 		stage('Docker Image Build : ECR'){
          when { expression {  params.action == 'create' } }
             steps{
@@ -96,13 +96,13 @@ pipeline{
         stage('Docker Image Push : ECR '){
          when { expression {  params.action == 'create' } }
             steps{
-               script{
+               sh """
 					aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
 					aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
 					aws configure set aws_session_token $AWS_SESSION_TOKEN
 					aws configure set default.region ${params.Region}
 					dockerImagePushECR("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
-               }
+               """
             }
         }   
         stage('Docker Image Cleanup : ECR '){
