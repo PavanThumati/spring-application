@@ -16,7 +16,8 @@ pipeline{
     }
 	environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    	AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    	AWS_SESSION_TOKEN     = credentials('AWS_SESSION_TOKEN')
     }
 	stages{ 
 		stage('gitcheckout'){
@@ -96,9 +97,11 @@ pipeline{
          when { expression {  params.action == 'create' } }
             steps{
                script{
-                   aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-                   aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-                   dockerImagePushECR("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
+					aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+					aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+					aws configure set aws_session_token $AWS_SESSION_TOKEN
+					aws configure set default.region ${params.Region}
+					dockerImagePushECR("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
                }
             }
         }   
